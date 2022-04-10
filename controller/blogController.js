@@ -69,14 +69,49 @@ async function singleBlog(req, res, next) {
   }
 }
 // comment
-async function commentBlog(req, res, next) {
+async function blogComment(req, res, next) {
   try {
     await Blog.findOneAndUpdate(
       { _id: req.params.blogId },
       { $push: { comment: { ...req.body } } }
     );
 
-    res.status(200).json({ message: "Blog was commment successfully!" });
+    res.status(200).json({ message: "Blog was comment successfully!" });
+  } catch (error) {
+    res.status(500).json({
+      errors: {
+        common: {
+          msg: error.message,
+        },
+      },
+    });
+  }
+}
+// children Comment
+async function childrenBlogComment(req, res, next) {
+  try {
+    await Blog.updateOne(
+      {
+        _id: req.params.blogId,
+      },
+      {
+        comment: {
+          $elemMatch: {
+            _id: req.params.childrenId,
+          },
+        },
+      },
+      {
+        $push: {
+          "comment.childrenComment": { ...req.body },
+        },
+      }
+    );
+
+    res.status(200).json({
+      // data: dataFind,
+      message: "Blog children was comment successfully!",
+    });
   } catch (error) {
     res.status(500).json({
       errors: {
@@ -88,4 +123,10 @@ async function commentBlog(req, res, next) {
   }
 }
 
-module.exports = { getBlogs, createBlog, singleBlog, commentBlog };
+module.exports = {
+  getBlogs,
+  createBlog,
+  singleBlog,
+  blogComment,
+  childrenBlogComment,
+};

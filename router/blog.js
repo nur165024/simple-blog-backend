@@ -6,7 +6,8 @@ const {
   getBlogs,
   createBlog,
   singleBlog,
-  commentBlog,
+  blogComment,
+  childrenBlogComment,
 } = require("../controller/blogController");
 const {
   blogValidator,
@@ -25,8 +26,9 @@ router.post("/", blogValidator, blogValidatorMessageHandler, createBlog);
 router.get("/:blogId", singleBlog);
 
 // comment blog router
-router.put("/comment/:blogId", commentBlog);
+router.post("/comment/:blogId", blogComment);
 
-// single comment blog find
+// children blog comment
+router.post("/:blogId/children/comment/:childrenId", childrenBlogComment);
 
 module.exports = router;
