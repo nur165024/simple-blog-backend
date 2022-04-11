@@ -29,6 +29,6 @@ router.get("/:blogId", singleBlog);
 router.post("/comment/:blogId", blogComment);
 
 // children blog comment
-router.post("/:blogId/children/comment/:childrenId", childrenBlogComment);
+router.post("/children/comment/:blogId/:childrenId", childrenBlogComment);
 
 module.exports = router;

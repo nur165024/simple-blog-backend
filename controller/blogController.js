@@ -3,7 +3,7 @@ const Blog = require("../model/blog");
 
 // get all blogs
 async function getBlogs(req, res, next) {
-  const { page = 1, limit = 5 } = req.query;
+  const { page = 0, limit = 0 } = req.query;
 
   const totalBlog = await Blog.countDocuments();
 
@@ -93,8 +93,6 @@ async function childrenBlogComment(req, res, next) {
     await Blog.updateOne(
       {
         _id: req.params.blogId,
-      },
-      {
         comment: {
           $elemMatch: {
             _id: req.params.childrenId,
@@ -103,13 +101,13 @@ async function childrenBlogComment(req, res, next) {
       },
       {
         $push: {
-          "comment.childrenComment": { ...req.body },
+          "comment.$.childrenComment": { ...req.body },
         },
       }
     );
 
     res.status(200).json({
-      // data: dataFind,
+      // data: data,
       message: "Blog children was comment successfully!",
     });
   } catch (error) {
