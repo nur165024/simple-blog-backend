@@ -12,6 +12,7 @@ const {
 const {
   blogValidator,
   blogValidatorMessageHandler,
+  blogCommentValidator,
 } = require("../middlewares/blog/blogValidators");
 
 const router = express.Router();
@@ -26,9 +27,19 @@ router.post("/", blogValidator, blogValidatorMessageHandler, createBlog);
 router.get("/:blogId", singleBlog);
 
 // comment blog router
-router.post("/comment/:blogId", blogComment);
+router.post(
+  "/comment/:blogId",
+  blogCommentValidator,
+  blogValidatorMessageHandler,
+  blogComment
+);
 
 // children blog comment
-router.post("/children/comment/:blogId/:childrenId", childrenBlogComment);
+router.post(
+  "/children/comment/:blogId/:childrenId",
+  blogCommentValidator,
+  blogValidatorMessageHandler,
+  childrenBlogComment
+);
 
 module.exports = router;

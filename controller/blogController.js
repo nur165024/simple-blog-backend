@@ -9,6 +9,7 @@ async function getBlogs(req, res, next) {
 
   try {
     const blogs = await Blog.find()
+      .select("_id title content date createdAt")
       .limit(limit * 1)
       .skip((page - 1) * limit)
       .sort({ createdAt: -1 });
@@ -56,7 +57,7 @@ async function createBlog(req, res, next) {
 // single blog
 async function singleBlog(req, res, next) {
   try {
-    const singleBlog = await Blog.findById(req.params.blogId);
+    const singleBlog = await Blog.findOne({ _id: req.params.blogId });
     res.status(200).json({ data: singleBlog, message: "success" });
   } catch (error) {
     res.status(500).json({

@@ -5,17 +5,31 @@ const { check, validationResult } = require("express-validator");
 const blogValidator = [
   check("title")
     .isString()
-    .withMessage("Title is required")
     .isLength({ min: 2 })
+    .withMessage("Title is required")
     .trim(),
 
   check("content")
     .isString()
     .notEmpty()
-    .withMessage("content is required")
+    .withMessage("Content is required")
     .trim(),
 
-  check("date").notEmpty().withMessage("experience Time is required").trim(),
+  check("date").notEmpty().withMessage("Time is required").trim(),
+];
+
+const blogCommentValidator = [
+  check("name")
+    .isString()
+    .isLength({ min: 2 })
+    .withMessage("Name is required")
+    .trim(),
+
+  check("comment")
+    .isString()
+    .notEmpty()
+    .withMessage("Comment is required")
+    .trim(),
 ];
 
 // blog validator message and response handler
@@ -32,4 +46,8 @@ const blogValidatorMessageHandler = (req, res, next) => {
   }
 };
 
-module.exports = { blogValidator, blogValidatorMessageHandler };
+module.exports = {
+  blogValidator,
+  blogCommentValidator,
+  blogValidatorMessageHandler,
+};
